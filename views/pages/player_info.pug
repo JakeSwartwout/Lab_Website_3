@@ -1,0 +1,67 @@
+//- player-info.pug
+include ../partials/header.pug
+include ../partials/menu.pug
+
+div.container
+  br
+  div.row
+    div.col-4
+      div.card
+        //- TODO: Modify the pug code below to conditionally set the image_src
+        - let image_src = '../../resources/img/helmet.jpg'
+        - if(who)
+          - image_src = who.img_src
+
+        img.card-img-top#player_img(src= image_src, alt="Football Player")
+        div.card-body.mx-auto
+          form.form(action="/player_info/post", method="get")
+            select.custom-select(name="player_choice", onchange="this.form.submit()")
+              option(selected) Select Player
+              //- TODO: Populate the select with player options. Set the value to the player's id and display the player's name.
+              for player in players
+                option(value=player.id)=player.name
+    div.col-8
+      div.table-responsive
+        table.table
+          //- TODO: Set the player's information. On select, fill in the player's information in each of the field below. You will need to calculate the average rushing, receiving, and passing yards.
+          - let year = '?'
+          - let major = '?'
+          - let passing = '?'
+          - let rushing = '?'
+          - let receiving = '?'
+          - let avg_passing = '?'
+          - let avg_rushing = '?'
+          - let avg_receiving = '?'
+          - if(who)
+            - year = who.year
+            - major = who.major
+            - passing = who.passing_yards
+            - rushing =  who.rushing_yards
+            - receiving = who.receiving_yards
+            - if(games)
+              - avg_passing = who.passing_yards / games
+              - avg_rushing = who.rushing_yards / games
+              - avg_receiving = who.receiving_yards / games
+              - avg_passing.toFixed()
+          - if (!games)
+            - games = '?'
+          tr
+            th Year
+            td=year
+          tr
+            th Major
+            td=major
+          tr
+            th Games Played
+            td=games
+          tr
+            td='Passing Yards: '+passing
+            td='Avg. Passing Yards: '+avg_passing
+          tr
+            td='Rushing Yards: '+rushing
+            td='Avg. Rushing Yards: '+avg_rushing
+          tr
+            td='Receiving Yards: '+receiving
+            td='Avg. Receiving Yards: '+avg_receiving
+
+include ../partials/footer.pug
